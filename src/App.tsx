@@ -12,17 +12,18 @@ import { Amplify } from "aws-amplify";
 import "@aws-amplify/ui-react/styles.css";
 import { generateClient } from "aws-amplify/data";
 import outputs from "../amplify_outputs.json";
+import type { Schema } from "../amplify/data/resource";
 /**
  * @type {import('aws-amplify/data').Client<import('../amplify/data/resource').Schema>}
  */
 
 Amplify.configure(outputs);
-const client = generateClient({
+const client = generateClient<Schema>({
   authMode: "userPool",
 });
 
 export default function App() {
-  const [userprofiles, setUserProfiles] = useState([]);
+  const [userprofiles, setUserProfiles] = useState<Schema["UserProfile"]["type"][]>([]);
   const { signOut } = useAuthenticator((context) => [context.user]);
 
   useEffect(() => {
@@ -67,7 +68,7 @@ export default function App() {
             className="box"
           >
             <View>
-              <Heading level="3">{userprofile.email}</Heading>
+              <Heading level={3}>{userprofile.email}</Heading>
             </View>
           </Flex>
         ))}
